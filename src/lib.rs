@@ -69,10 +69,13 @@
 //!
 
 // enable SIMD nightly features when on nightly_simd enabled
-#![cfg_attr(feature = "nightly_simd", feature(stdsimd))]
+#![feature(cfg_version)]
+#![cfg_attr(all(feature = "nightly_simd", not(version("1.78"))), feature(stdsimd))]
 #![cfg_attr(feature = "nightly_simd", feature(avx512_target_feature))]
 #![cfg_attr(feature = "nightly_simd", feature(arm_target_feature))]
-
+// enable stdarch_x86_avx512 feature
+#![cfg_attr(all(version("1.78"),target_arch = "x86_64"), feature(stdarch_x86_avx512))]
+#![cfg_attr(all(version("1.78"),target_arch = "arm"), feature(stdarch_arm_neon_intrinsics))]
 // It is necessary to import this at the root of the crate
 // See: https://github.com/la10736/rstest/tree/master/rstest_reuse#use-rstest_resuse-at-the-top-of-your-crate
 #[cfg(test)]
